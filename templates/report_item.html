@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report a Lost Item</title>
+    <style>
+        /* Color Palette */
+        :root {
+          --dark-green: #328e6e;
+          --medium-green: #6eaf6d;
+          --light-green: #96c36e;
+          --pale-green: #dce9b6;
+          --text-color: #1c1c1c;
+          --white: #ffffff;
+          --error-color: #e74c3c;
+          --success-color: #2ecc71;
+        }
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+        body {
+          margin: 0;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background: var(--pale-green);
+          color: var(--text-color);
+          line-height: 1.6;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+        header {
+          background-color: var(--dark-green);
+          padding: 15px 0;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        nav ul {
+          display: flex;
+          justify-content: flex-end;
+          list-style: none;
+          margin: 0;
+          padding: 0 20px;
+        }
+        nav li {
+          margin: 0 20px;
+        }
+        nav a {
+          color: var(--white);
+          text-decoration: none;
+          font-size: 16px;
+          font-weight: bold;
+          transition: color 0.3s ease;
+        }
+        nav a:hover {
+          color: var(--pale-green);
+        }
+        .container {
+          max-width: 800px;
+          margin: 40px auto;
+          padding: 30px;
+          background-color: var(--white);
+          border-radius: 10px;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+          flex: 1;
+        }
+        h1 {
+          text-align: center;
+          margin-bottom: 25px;
+          color: var(--dark-green);
+          font-size: 2.5rem;
+        }
+        h2 {
+          color: var(--medium-green);
+          margin-bottom: 15px;
+        }
+        p {
+          margin-bottom: 20px;
+          font-size: 1.1rem;
+          text-align: center;
+        }
+        label {
+          display: block;
+          margin-top: 15px;
+          margin-bottom: 5px;
+          font-weight: 500;
+          color: var(--text-color);
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        textarea {
+          width: 100%;
+          padding: 12px;
+          font-size: 16px;
+          border: 2px solid var(--light-green);
+          border-radius: 8px;
+          background-color: var(--white);
+          margin-bottom: 15px;
+          transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="date"]:focus,
+        textarea:focus {
+          outline: none;
+          border-color: var(--dark-green);
+          box-shadow: 0 0 5px rgba(50, 142, 110, 0.5);
+        }
+        textarea {
+          min-height: 120px;
+          resize: vertical;
+        }
+        .big-button {
+          background-color: var(--dark-green);
+          color: var(--white);
+          padding: 14px 24px;
+          width: 100%;
+          border: none;
+          font-size: 18px;
+          font-weight: bold;
+          border-radius: 8px;
+          cursor: pointer;
+          margin-top: 20px;
+          transition: background-color 0.3s ease, transform 0.2s ease;
+          text-align: center;
+          display: block;
+          text-decoration: none;
+        }
+        .big-button:hover {
+          background-color: var(--medium-green);
+          transform: translateY(-2px);
+        }
+        .big-button:active {
+          transform: translateY(0);
+        }
+        .button-container {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+          margin-top: 20px;
+        }
+        .flash-messages {
+          margin-bottom: 20px;
+        }
+        .flash-message {
+          padding: 10px 15px;
+          margin-bottom: 10px;
+          border-radius: 5px;
+          font-weight: bold;
+        }
+        .flash-message.error {
+          background-color: var(--error-color);
+          color: var(--white);
+        }
+        .flash-message.success {
+          background-color: var(--success-color);
+          color: var(--white);
+        }
+        .go-back {
+          display: inline-block;
+          margin-top: 20px;
+          text-align: center;
+          width: 100%;
+        }
+        footer {
+          background-color: var(--dark-green);
+          color: var(--white);
+          text-align: center;
+          padding: 15px 0;
+          margin-top: auto;
+        }
+        /* Responsive styles */
+        @media (max-width: 768px) {
+          .container {
+              padding: 20px;
+              margin: 20px;
+              width: auto;
+          }
+          
+          h1 {
+              font-size: 2rem;
+          }
+          
+          nav ul {
+              justify-content: center;
+          }
+        }
+        @media (max-width: 480px) {
+          nav li {
+              margin: 0 10px;
+          }
+          
+          h1 {
+              font-size: 1.8rem;
+          }
+          
+          .big-button {
+              padding: 12px 18px;
+              font-size: 16px;
+          }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('contact') }}"><i class="fas fa-question-circle"></i> Contact & Support</a></li>
+                <li><a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About Us</a></li>
+                <li><a href="{{ url_for('web2') }}"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="container">
+        <h1>Report a Lost Item</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <form action="{{ url_for('submit_report') }}" method="POST" id="reportForm" onsubmit="return validateReportForm()">
+            <label for="item_name">Item Name:</label>
+            <input type="text" id="item_name" name="item_name" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+
+            <label for="date">Date Lost:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="location">Location Lost:</label>
+            <input type="text" id="location" name="location" required>
+
+            <label for="contact_email">Your Contact Email:</label>
+            <input type="email" id="contact_email" name="contact_email" 
+                   value="{{ session.get('email', '') }}" required>
+
+            <button type="submit" class="big-button">
+                <i class="fas fa-paper-plane"></i> Submit Report
+            </button>
+        </form>
+        
+        <a href="{{ url_for('web2') }}" class="big-button" style="margin-top: 15px; background-color: var(--medium-green);">
+            <i class="fas fa-arrow-left"></i> Back to Options
+        </a>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Campus Lost & Found | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        function validateReportForm() {
+            const itemName = document.getElementById('item_name').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const dateLost = document.getElementById('date').value;
+            const location = document.getElementById('location').value.trim();
+            const email = document.getElementById('contact_email').value.trim();
+            
+            if (!itemName) {
+                alert('Please enter the item name');
+                return false;
+            }
+            
+            if (!description) {
+                alert('Please provide a description of the item');
+                return false;
+            }
+            
+            if (!dateLost) {
+                alert('Please select the date when the item was lost');
+                return false;
+            }
+            
+            if (!location) {
+                alert('Please enter the location where the item was lost');
+                return false;
+            }
+            
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Set default date to today
+        window.onload = function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+        };
+    </script>
+</body>
+</html>
