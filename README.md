@@ -15,4 +15,4 @@ This is a full-stack web application designed to streamline the management of lo
 
 - Frontend: HTML, CSS
 - Backend: Python (Flask)
-- Database: MySQL
+- Database: SQLite
